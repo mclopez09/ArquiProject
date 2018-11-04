@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------------------------------------------------------
--- Actividad : Adder Proyecto
+-- Actividad : IR Proyecto
 -- Autores : German Andres Caycedo , David Hernandez, Maria Camila Lopez, Alejandro Meza
 -- Fecha : 20/10/2018-25/10/2018
 --
--- archivo : Adder_v1.vhd
+-- archivo : IR_v1.vhd
 ----------------------------------------------------------------------------------------------------------------------
 -- Descripción : Vamos a hacer el IR del proyecto
 ----------------------------------------------------------------------------------------------------------------------
@@ -15,12 +15,15 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 Entity IR_v1 is
+
+	generic (N: positive := 16 ; M: positive := 4);
+
 	port
-	(	instruccion : in std_logic_vector(15 downto 0);
+	(	instruccion,outjump : in std_logic_vector(N downto 0);
 		oeir,irwrite: inout std_logic;
 		clk : in std_logic;
-		opcode : out std_logic_vector(3 downto 0);
-		outrd,outrs,outrt,outjump : out std_logic_vector(7 downto 0):="00000000"
+		opcode : out std_logic_vector(M downto 0);
+		outrd,outrs,outrt : out std_logic_vector(M downto 0):="0000"
 	);
 end entity;
 Architecture IR_v1_arc of IR_v1 is
