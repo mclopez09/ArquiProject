@@ -15,8 +15,8 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 Entity PC_v1 is
-	generic (N: positive);
-	generic (M: positive);
+	generic (N: positive := 8);
+	generic (M: positive := 16);
 	port
 	(	MuxPc : in std_logic_vector(N-1 downto 0);
 		PcOut : out std_logic_vector(M-1 downto 0);

@@ -15,7 +15,7 @@ use ieee.std_logic_unsigned.all;
 --entity rom
 
 entity Rom_v1 is
-generic (N: positive);
+generic (N: positive := 16);
 port(
 	clk: std_logic;
 	address: in integer range 0 to 255;

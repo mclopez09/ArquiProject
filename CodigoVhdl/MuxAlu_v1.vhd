@@ -14,7 +14,7 @@ Library IEEE;
 use IEEE.std_logic_1164.all;
 
 Entity MuxAlu_v1 is
-	generic (N: positive);
+	generic (N: positive := 8);
 	port
 	(	registerFile : in std_logic_vector(N-1 downto 0);
 		irA : in std_logic_vector(N-1 downto 0);

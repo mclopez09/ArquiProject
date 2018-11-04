@@ -16,7 +16,7 @@ use ieee.std_logic_unsigned.all;
 --entity ram
 
 entity Ram_v1 is
-generic (N: positive);
+generic (N: positive := 8);
 port(
 	clk, WriteMem: in std_logic;
 	data_in: in std_logic_vector(N-1 downto 0);
