@@ -15,7 +15,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 Entity Adder_v1 is
-	generic (N: positive);
+	generic (N: positive := 8);
 	port
 	(
 		Pc: in std_logic_vector(N-1 downto 0);

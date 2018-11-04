@@ -33,7 +33,7 @@ Architecture PC_v1_arc of PC_v1 is
 		Begin
 			if (rising_edge(clk)and PcSig = '1') then
 				temp <= "00000001";
-				temp2 <= std_logic_vector(unsigned(MuxPc) *	unsigned(temp);
+				temp2 <= std_logic_vector(unsigned(MuxPc) *	unsigned(temp));
 			end if;
 			PcOut <= temp2;
 		end process;
