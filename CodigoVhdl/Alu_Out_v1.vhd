@@ -15,9 +15,10 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 Entity Alu_out_v1 is
+	generic (N: positive);
 	port(
-		dataAlu : in std_logic_vector(15 downto 0);
-		RESUL: out std_logic_vector(15 downto 0);
+		dataAlu : in std_logic_vector(N-1 downto 0);
+		RESUL: out std_logic_vector(N-1 downto 0);
 		oeAluOut: in std_logic
 	);
 End Entity;

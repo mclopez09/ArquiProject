@@ -15,10 +15,11 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 Entity Adder_v1 is
+	generic (N: positive);
 	port
 	(
-		Pc: in std_logic_vector(7 downto 0);
-		Pc1: out std_logic_vector(7 downto 0)
+		Pc: in std_logic_vector(N-1 downto 0);
+		Pc1: out std_logic_vector(N-1 downto 0)
 	);
 
 End Entity;

@@ -14,12 +14,13 @@ Library IEEE;
 use IEEE.std_logic_1164.all;
 
 Entity MuxPc_v1 is
+	generic (N: positive);
 	port
-	(	Jump : in std_logic_vector(7 downto 0);
-		Adder : in std_logic_vector(7 downto 0);
+	(	Jump : in std_logic_vector(N-1 downto 0);
+		Adder : in std_logic_vector(N-1 downto 0);
 		clk : in std_logic;
 		PcSource: in std_logic;
-		MuxOut : out std_logic_vector(7 downto 0)
+		MuxOut : out std_logic_vector(N-1 downto 0)
 	);
 
 End Entity;

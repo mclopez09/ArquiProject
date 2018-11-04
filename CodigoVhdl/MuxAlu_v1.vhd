@@ -14,12 +14,13 @@ Library IEEE;
 use IEEE.std_logic_1164.all;
 
 Entity MuxAlu_v1 is
+	generic (N: positive);
 	port
-	(	registerFile : in std_logic_vector(7 downto 0);
-		irA : in std_logic_vector(7 downto 0);
+	(	registerFile : in std_logic_vector(N-1 downto 0);
+		irA : in std_logic_vector(N-1 downto 0);
 		clk : in std_logic;
 		PcSource: in std_logic;
-		MuxOut : out std_logic_vector(7 downto 0)
+		MuxOut : out std_logic_vector(N-1 downto 0)
 	);
 
 End Entity;

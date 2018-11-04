@@ -13,11 +13,13 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 --entity rom
+
 entity Rom_v1 is
+generic (N: positive);
 port(
 	clk: std_logic;
 	address: in integer range 0 to 255;
-	data_out: out std_logic_vector(17 downto 0)
+	data_out: out std_logic_vector(N-1 downto 0)
 );
 end entity;
 

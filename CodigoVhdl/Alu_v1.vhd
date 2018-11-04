@@ -15,10 +15,13 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 Entity Alu_v1 is
+	generic (N: positive);
+	generic (M: positive)
+
 	port(
-		OPCODE : in std_logic_vector(3 downto 0);
-		A,B,C : in std_logic_vector(15 downto 0);
-		RESUL: out std_logic_vector(15 downto 0);
+		OPCODE : in std_logic_vector(M-1 downto 0);
+		A,B,C : in std_logic_vector(N-1 downto 0);
+		RESUL: out std_logic_vector(N-1 downto 0);
 		Branch: out std_logic
 	);
 End Entity;
