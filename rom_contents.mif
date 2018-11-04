@@ -1,0 +1,54 @@
+WIDTH = 8;
+DEPTH = 16;
+ADDRESS_RADIX = UNS;
+DATA_RADIX = BIN;
+CONTENT BEGIN
+0 : 1011 1000 0000 00000000; #input $at, 19, 0 #edad 
+1 : 1011 1000 0000 00000001; #input $at, 0, 1 #duraciondiclo
+2 : 1011 1000 0000 00000010; #input $at, 3,2#diasultimezperiodo
+3 : 1011 1000 0000 00000011; #input $at, 10, 3 #diasultimarelacion
+4 : 1011 1000 0000 00000100; #input $at, 5, 4 #diasduracionperiodo
+5 : 1011 1000 0000 00000101; #input $at, 0, 5 #planifica (1/0)
+6 : 1011 1000 0000 00000110; #input $at, 1, 6 #estaperiodo (1/0)
+7 : 1011 1000 0000 00000111; #input $at,28, 7
+8 : 1011 1000 0000 00001000; #input $at,10,8
+9 : 1011 1000 0000 00001001; #input $at,51, 
+10 : 1011 1000 0000 00001010; #input $at,17, 10
+11 : 1011 1000 0000 00001011; #input $at 50, 11
+12 : 1011 1000 0000 00001100; #input $at,15,12
+13 : 1011 1000 0000 00001101; #input $at,88,13 #sigue ProxPeriodo
+14 : 1101 0000 0000 00000001; #lw $r0, 1 #duracionciclo
+15 : 0100 0000 1100 00010100; #beq $r0,0,Prox 
+16 : 1101 0001 0000 00000010; #lw $r1, 2 
+17 : 0000 0010 0011 0000 0001; #sub $r3, $r0,$r1
+18 : 1110 0011 0000 00100001; #sw $r3, 80
+19 : 1010 0000000000011000; #j PeriodoFertil #Sigue Prox
+20 : 1101 0100 0000 00000111; #lw $r4, 7 #28;
+21 : 0000 0010 0011 0100 0001; #sub $r3,$r4,$r1
+22 : 1110 0011 0000 00100010; #sw $r3, 80 #Sigue PeriodoFertil
+23 : 1001 0000 0000 01000001; #bgtz $r0,DurCi
+24 : 1101 0101 0000 00000101; #lw $r5, 5
+25 : 0100 0101 1100 peFer; #bnq $r5,0,peFer
+26 : 1101 0110 0000 00000110; #lw $r6, 6
+27 : 0101 0110 0000 peFer2; #beq $r6,1,PeFer2
+28 : 0100 0110 1100 peFer3; #beq $r6,0,PeFer3 #sigue pefer3
+29 : 1101 0011 0000 00001000 #lw $r3,8
+30 : 0111 0001 0011 pefer4; #bgt $r1,$r3,PeFer4
+31 : 0110 0001 0011 pefer6; #blt $r1,$r3,PeFer6
+32 : 1101 0011 0000 00001010 #lw $r3,10
+33 : 1000 0001 0011 pefer7; #bge $r1,$r3,PeFer7 #sigue pefer4
+34 : 1101 0011 0000 00001010; lw $r3,10  
+35 : 0110 0001 0011; blt $r1,17,PeFer5 #pefer5
+36 : 1010 pefer7; j PeFer7 #sigue pefer5
+37 : 0000 0010 0011 0011 0011; #sub $r3, $r3, $r3
+38 : 0001 0011 0011 00000001; #addi $r3,$r3,1
+39 : 1110 0011 0000 01010001; #sw $r3, 81
+40 : 1010 menopausia; #j menopausia #sigue pefer6
+41 : 1101 0011 0000 00001000; #lw $r3,10
+42 : 0001 0011 0011 00000001; #addi $r3,$r3,$r1
+43 : 1110 0011 0000 00010001; #sw $r3, 81
+44 : 1010 menopausia; #j menopausia #sigue pefer7
+45 : 
+[7..14]:0;
+15: 17;
+END;
