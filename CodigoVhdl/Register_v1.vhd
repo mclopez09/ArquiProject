@@ -16,8 +16,7 @@ use ieee.std_logic_unsigned.all;
 
 
 entity Register is
-generic (N: positive := 4); --4
-generic (N: positive := 8); --8
+generic (N: positive := 4 ; M: positive := 8);
 
 
 port(
