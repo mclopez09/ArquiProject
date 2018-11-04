@@ -19,11 +19,12 @@ Entity IR_v1 is
 	generic (N: positive := 16 ; M: positive := 4);
 
 	port
-	(	instruccion,outjump : in std_logic_vector(N downto 0);
+	(	instruccion: in std_logic_vector(N-1 downto 0);
 		oeir,irwrite: inout std_logic;
 		clk : in std_logic;
-		opcode : out std_logic_vector(M downto 0);
-		outrd,outrs,outrt : out std_logic_vector(M downto 0):="0000"
+		opcode : out std_logic_vector(M-1 downto 0);
+		outrd,outrs,outrt : out std_logic_vector(M-1 downto 0):="0000"
+		outjump : out std_logic_vector(N-1 downto 0);
 	);
 end entity;
 Architecture IR_v1_arc of IR_v1 is
