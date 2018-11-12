@@ -19,7 +19,7 @@ Entity MuxAlu_v1 is
 	(	registerFile : in std_logic_vector(N-1 downto 0);
 		irA : in std_logic_vector(N-1 downto 0);
 		clk : in std_logic;
-		PcSource: in std_logic;
+		AluSource: in std_logic;
 		MuxOut : out std_logic_vector(N-1 downto 0)
 	);
 
@@ -29,13 +29,13 @@ End Entity;
 Architecture MuxAlu_v1_arc of MuxAlu_v1 is
 	signal temp : std_logic_vector(7 downto 0);
 	Begin
-		Process (clk,registerFile,irA,temp,PcSource)
+		Process (clk,registerFile,irA,temp,AluSource)
 		Begin
 			if (rising_edge(clk)) then
-				if (PcSource = '0') then
+				if (AluSource = '0') then
 					temp <= registerFile;
 				end if;
-				if (PcSource = '1') then
+				if (AluSource = '1') then
 					temp <= irA;
 				end if;
 			end if;
@@ -43,6 +43,4 @@ Architecture MuxAlu_v1_arc of MuxAlu_v1 is
 		end process;
 
 End Architecture MuxAlu_v1_arc ;
-
-
 
