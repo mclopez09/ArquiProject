@@ -27,8 +27,6 @@ End Entity;
 Architecture Alu_out_v1_arc of Alu_out_v1 is
 Begin
 
-	RESUL <= dataAlu;
+	RESULOUT <= dataAlu;
 
 End Architecture Alu_out_v1_arc;
-
-
