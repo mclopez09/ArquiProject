@@ -28,7 +28,7 @@ Entity Arquitectura_v1 is
 
 	port ( entrada : in std_logic_vector(7 downto 0);
 			enter : in std_logic;
-			reset : in std_logic;
+			reseteo : in std_logic;
 
 			salida1 : out std_logic_vector(7 downto 0);
 			salida2 : out std_logic_vector(7 downto 0);
@@ -164,6 +164,57 @@ Architecture structural of Arquitectura_v1 is
 	);
 	End Component;
 
+	Component UControl_v1 
+
+	generic (Nu: positive := 4);
+	port
+	(
+		clk : in	std_logic;
+		reset : in	std_logic;
+		input : in std_logic_vector(Nu-1 downto 0);
+		pcwritecond : out std_logic;
+		pcwrite : out std_logic;
+		pcsource : out std_logic;
+		irwrite : out std_logic;
+		oeirj :out std_logic;
+		oeiri :out std_logic;
+		regwrite : out std_logic;		
+		memread : out std_logic;
+		memwrite : out std_logic;
+		regtomem :out std_logic;	
+		aluop : out std_logic_vector (Nu-1 downto 0);
+		alusrc : out std_logic;
+		writemem :out std_logic;
+		readmem :out std_logic;
+		memtoreg : out std_logic;
+		oealuout :out std_logic;
+		oedatain :out std_logic
+	);
+	End Component;
+
+	Component And_v1 
+
+	port
+	(	
+		PcWriteCond : in std_logic;
+		AluZero: in std_logic;
+		AndOut : out std_logic
+	);
+
+
+	End Component;
+
+	Component Or_v1
+
+	port
+	(	
+		AndOut : in std_logic;
+		PcWrite: in std_logic;
+		OrOut : out std_logic
+	);
+
+	End Component;
+
 	signal OPCODEALU : std_logic_vector(3 downto 0);
 	signal AALU : std_logic_vector(7 downto 0);
 	signal BALU : std_logic_vector(7 downto 0);
@@ -195,6 +246,14 @@ Architecture structural of Arquitectura_v1 is
 	signal ALUOUTOE : std_logic;
 	signal ALUOUTSAL : std_logic_vector(7 downto 0);
 	signal CLOCK : std_logic;
+	signal CONDPCWRITE : std_logic;
+	signal WRITEPC : std_logic;
+	signal READMEM : std_logic;
+	signal WRITEMEM : std_logic;
+	signal DATAINOE : std_logic;
+	signal ZERO : std_logic;
+	signal OUTAND : std_logic;
+	signal OUTOR : std_logic;
 
 BEGIN	
 	
@@ -220,11 +279,20 @@ BEGIN
 	port map (registerFile => ALUREGISTER, irA => CONSTANTEIR, AluSource => SOURCEALU, MuxOut => OUTMUX, clk => CLOCK);
 
 	AluC1: Alu_v1 generic map (NAlu=>ADDR_WIDTH,MAlu=>OPCODE_WIDTH)
-	port map (OPCODE => OPCODEALU, A => ALUREGISTER, B => OUTMUX, RESUL => ALURESUL);
+	port map (OPCODE => OPCODEALU, A => ALUREGISTER, B => OUTMUX, RESUL => ALURESUL, Branch => ZERO);
 
 	AluOutC1: Alu_Out_v1 generic map (NAluOut => ADDR_WIDTH)
 	port map (dataAlu => ALURESUL,RESULOUT => ALUOUTSAL, oeAluOut => ALUOUTOE);
 
 	--RAMC1: Ram_v1 generic map (Mram => ADDR_WIDTH)
 	--port map (data_in => entrada , wr_address => CONSTANTEDIR, rd_address => CONSTANTEDIR, data_out => )
+
+	UControlC1: UControl_v1 generic map(Nu => OPCODE_WIDTH)
+	port map (clk => CLOCK, reset => reseteo, input => IROPCODE, pcwritecond => CONDPCWRITE, pcwrite => WRITEPC, pcsource => PCSOURCEMUX, irwrite => WRITEIR, oeirj => IRJOE, oeiri => IROE, regwrite => WRITEREG,regtomem => MEMREG, aluop => OPCODEALU, alusrc => SOURCEALU, memread => READMEM, memwrite => WRITEMEM, oealuout => ALUOUTOE, oedatain => DATAINOE);
+
+	AndC1: And_v1 port map (PcWriteCond => CONDPCWRITE, AluZero => ZERO, AndOut => OUTAND);
+
+	ORC1: Or_v1 port map (AndOut => OUTAND, PcWrite => WRITEPC, OrOut => OUTOR);
+
+
 End structural;
