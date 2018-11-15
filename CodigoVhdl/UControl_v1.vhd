@@ -14,12 +14,12 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity UControl_v1 is
-
+	generic(Nu: positive:=4);
 	port
 	(
 		clk : in	std_logic;
 		reset : in	std_logic;
-		input : in std_logic_vector(3 downto 0);
+		input : in std_logic_vector(Nu-1 downto 0);
 		pcwritecond : out std_logic;
 		pcwrite : out std_logic;
 		pcsource : out std_logic;
@@ -27,14 +27,11 @@ entity UControl_v1 is
 		oeirj :out std_logic;
 		oeiri :out std_logic;
 		regwrite : out std_logic;		
-		memread : out std_logic;
-		memwrite : out std_logic;
 		regtomem :out std_logic;	
-		aluop : out std_logic_vector (3 downto 0);
+		aluop : out std_logic_vector (Nu-1 downto 0);
 		alusrc : out std_logic;
 		writemem :out std_logic;
 		readmem :out std_logic;
-		memtoreg : out std_logic;
 		oealuout :out std_logic;
 		oedatain :out std_logic
 	);
@@ -116,6 +113,7 @@ begin
 					state <= fetch;
 				when sw =>
 					state <= fetch;
+				
 			end case;
 		end if;
 	end process;
@@ -132,14 +130,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '0';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when add=>
@@ -150,14 +145,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when completionr=>
@@ -168,14 +160,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when addi=>
@@ -186,14 +175,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '0';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0001";
 					alusrc <= '1';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when completioni=>
@@ -204,14 +190,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '1';
 					oedatain <= '0';
 				when sub=>
@@ -222,14 +205,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '0';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0010";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when mult=>
@@ -240,14 +220,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0011";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbeq=>
@@ -258,14 +235,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0100";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';			
 				when branchbnq=>
@@ -276,14 +250,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0101";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchblt=>
@@ -294,14 +265,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0110";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbgt=>
@@ -312,14 +280,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0111";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbgte=>
@@ -330,14 +295,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "1000";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbgtz=>
@@ -348,14 +310,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "1001";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when completionbranch=>
@@ -366,14 +325,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '1';
 					regwrite <= '0';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';			
 				when jump=>
@@ -384,34 +340,28 @@ begin
 					oeirj <= '1';
 					oeiri <= '0';
 					regwrite <= '0';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "1010";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when lw=>
 					pcwritecond <= '0';
-					pcwrite <= '1';
+					pcwrite <= '0';
 					pcsource <= '0';
 					irwrite <= '0';
-					oeirj <= '1';
+					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
-					memread <= '0';
-					memwrite <= '0';
 					regtomem <= '0';	
 					aluop <= "1101";
 					alusrc <= '0';
 					writemem <= '0';
 					readmem <= '1';
-					memtoreg <= '0';
 					oealuout <= '0';
-					oedatain <= '0';		
+					oedatain <= '0';	
 				when sw=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -420,14 +370,11 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '0';		
-					memread <= '0';
-					memwrite <= '1';
 					regtomem <= '1';	
 					aluop <= "1110";
 					alusrc <= '0';
-					writemem <= '0';
+					writemem <= '1';
 					readmem <= '0';
-					memtoreg <= '0';
 					oealuout <= '0';
 					oedatain <= '0';							
 			end case;
