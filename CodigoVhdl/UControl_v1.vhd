@@ -30,8 +30,8 @@ entity UControl_v1 is
 		regtomem :out std_logic;	
 		aluop : out std_logic_vector (Nu-1 downto 0);
 		alusrc : out std_logic;
-		writemem :out std_logic;
-		readmem :out std_logic;
+		memwrite :out std_logic;
+		memread :out std_logic;
 		oealuout :out std_logic;
 		oedatain :out std_logic
 	);
@@ -133,8 +133,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when add=>
@@ -148,8 +148,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when completionr=>
@@ -163,8 +163,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when addi=>
@@ -178,8 +178,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0001";
 					alusrc <= '1';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when completioni=>
@@ -193,8 +193,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '1';
 					oedatain <= '0';
 				when sub=>
@@ -208,8 +208,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0010";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when mult=>
@@ -223,8 +223,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0011";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbeq=>
@@ -238,8 +238,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0100";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';			
 				when branchbnq=>
@@ -253,8 +253,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0101";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchblt=>
@@ -268,8 +268,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0110";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbgt=>
@@ -283,8 +283,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0111";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbgte=>
@@ -298,8 +298,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "1000";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when branchbgtz=>
@@ -313,8 +313,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "1001";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when completionbranch=>
@@ -328,8 +328,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';			
 				when jump=>
@@ -343,8 +343,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "1010";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '0';
+					memwrite <= '0';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
 				when lw=>
@@ -358,8 +358,8 @@ begin
 					regtomem <= '0';	
 					aluop <= "1101";
 					alusrc <= '0';
-					writemem <= '0';
-					readmem <= '1';
+					memwrite <= '0';
+					memread <= '1';
 					oealuout <= '0';
 					oedatain <= '0';	
 				when sw=>
@@ -373,8 +373,8 @@ begin
 					regtomem <= '1';	
 					aluop <= "1110";
 					alusrc <= '0';
-					writemem <= '1';
-					readmem <= '0';
+					memwrite <= '1';
+					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';							
 			end case;
