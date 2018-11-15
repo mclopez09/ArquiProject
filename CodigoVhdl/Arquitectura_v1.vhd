@@ -26,14 +26,14 @@ Entity Arquitectura is
 		OPCODE_WIDTH : natural := 4
 	);
 
-	port ( entrada : in std_logic_vector(7 down to 0);
+	port ( entrada : in std_logic_vector(7 downto 0);
 			enter : in std_logic;
-			reset : in std_logic
+			reset : in std_logic;
 
-			salida1 : out std_logic_vector(7 down to 0);
-			salida2 : out std_logic_vector(7 down to 0);
-			salida3 : out std_logic_vector(7 down to 0);
-			salida4 : out std_logic_vector(7 down to 0)
+			salida1 : out std_logic_vector(7 downto 0);
+			salida2 : out std_logic_vector(7 downto 0);
+			salida3 : out std_logic_vector(7 downto 0);
+			salida4 : out std_logic_vector(7 downto 0)
 
 
 	);
@@ -43,13 +43,13 @@ End Entity;
 
 Architecture structural of Arquitectura is
 	
-	Component Alu 
+	Component Alu_v1 
 
 	generic (NAlu: positive := 8 ; MAlu: positive := 4);
 
 	port(
 		OPCODE : in std_logic_vector(MAlu-1 downto 0);
-		A,B,C : in std_logic_vector(NAlu-1 downto 0);
+		A,B : in std_logic_vector(NAlu-1 downto 0);
 		RESUL: out std_logic_vector(NAlu-1 downto 0);
 		Branch: out std_logic
 	);
@@ -57,7 +57,7 @@ Architecture structural of Arquitectura is
 	End Component;
 
 
-	Component MuxAlu
+	Component MuxAlu_v1
 
 	generic (Nalux: positive := 8);
 	port
@@ -70,7 +70,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component MuxPC
+	Component MuxPC_v1
 	generic (Nmuxpc: positive := 8);
 	port
 	(	Jump : in std_logic_vector(Nmuxpc-1 downto 0);
@@ -82,7 +82,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component Pc
+	Component Pc_v1
 	generic (Npc: positive := 8 ; Mpc: positive := 16);
 	port
 	(	MuxPc : in std_logic_vector(Npc-1 downto 0);
@@ -93,7 +93,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component Ram
+	Component Ram_v1
 	generic (Nram: positive := 20 ; Mram: positive := 8);
 	port(
 		clk, WriteMem: in std_logic;
@@ -104,7 +104,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component Rom
+	Component Rom_v1
 	generic (Nrom: positive := 20 ; Mrom: positive := 8);
 	port
 	(	clk: std_logic;
@@ -114,7 +114,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component RegisterFile
+	Component RegisterFile_v1
 	generic (Nreg: positive := 4 ; Mreg: positive := 8);
 
 
@@ -131,7 +131,7 @@ Architecture structural of Arquitectura is
 	);
 	End Component;
 
-	Component AluOut
+	Component Alu_Out_v1
 
 	generic (NAluOut: positive := 8);
 	port(
@@ -142,7 +142,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component Adder
+	Component Adder_v1
 	generic (Nadder: positive := 8);
 	port
 	(	Pc: in std_logic_vector(Nadder-1 downto 0);
@@ -151,7 +151,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component IR 
+	Component IR_v1
 	generic (Nir: positive := 20 ; Mir: positive := 4 ; Pir: positive := 8);
 
 	port
@@ -159,10 +159,10 @@ Architecture structural of Arquitectura is
 		oeir,irwrite,oeirj: inout std_logic;
 		clk : in std_logic;
 		opcode : out std_logic_vector(Mir-1 downto 0);
-		outrd,outrs,outrt : out std_logic_vector(Mir-1 downto 0):="0000"
-		outjump, constante, constante_dir : out std_logic_vector(Pir-1 downto 0);
+		outrd,outrs,outrt : out std_logic_vector(Mir-1 downto 0):="0000";
+		outjump, constante, constante_dir : out std_logic_vector(Pir-1 downto 0)
 	);
-
+	End Component;
 
 	signal OPCODEALU : std_logic_vector(3 downto 0);
 	signal AALU : std_logic_vector(7 downto 0);
@@ -176,7 +176,6 @@ Architecture structural of Arquitectura is
 	signal OUTPC : std_logic_vector(7 downto 0);
 	signal SIGPC : std_logic; 
 	signal ROMOUT : std_logic_vector(19 downto 0);
-	signal OPCODEALU : std_logic_vector(3 downto 0);
 	signal IROE : std_logic;
 	signal WRITEIR : std_logic;
 	signal IRJOE : std_logic;
@@ -184,7 +183,6 @@ Architecture structural of Arquitectura is
 	signal RDIR : std_logic_vector(3 downto 0);
 	signal RSIR : std_logic_vector(3 downto 0);
 	signal RTIR : std_logic_vector(3 downto 0);
-	signal JUMPIR : std_logic_vector(7 downto 0);
 	signal CONSTANTEIR : std_logic_vector(7 downto 0);
 	signal CONSTANTEDIR : std_logic_vector(7 downto 0);
 	signal WRITEREG : std_logic;
@@ -222,7 +220,7 @@ begin
 	IRC1: IR_v1 generic map (Nir => DATA_WIDTH, Mir => OPCODE_WIDTH, Pir => ADDR_WIDTH)
 	port map (instruccion => ROMOUT, oeir => IROE, irwrite => WRITEIR, oeirj => IRJOE, opcodeir => IROPCODE, outrd => RDIR, outrs => RSIR, outrt => RTIR, outjump => JUMPIR, constante => CONSTANTEIR, constante_dir => CONSTANTEDIR );
 
-	REGC1 Register_v1 generic map (Nreg => OPCODE_WIDTH, Mreg => ADDR_WIDTH)
+	REGC1: RegisterFile_v1 generic map (Nreg => OPCODE_WIDTH, Mreg => ADDR_WIDTH)
 	port map (regWrite => WRITEREG, regMem => MEMREG, rd => RDIR, rs => RSIR, rt => RTIR, Register_bus => OUTREGISTER, Register_alu => ALUREGISTER, Register_mux => MUXREGISTER);
 
 	MuxAluC1: MuxAlu_v1 generic map (Nalux => ADDR_WIDTH)
@@ -234,8 +232,8 @@ begin
 	AluOutC1: Ali_Out_v1 generic map (NAluOut => ADDR_WIDTH)
 	port map (dataAlu => ALURESUL,RESULOUT => ALUOUTSAL, oeAluOut => ALUOUTOE);
 
-	RAMC1: Ram_v1 generic map (Mram => ADDR_WIDTH)
-	port map (data_in => entrada , wr_address => CONSTANTEDIR, rd_address => CONSTANTEDIR, data_out => )
+	--RAMC1: Ram_v1 generic map (Mram => ADDR_WIDTH)
+	--port map (data_in => entrada , wr_address => CONSTANTEDIR, rd_address => CONSTANTEDIR, data_out => )
 
 
 
