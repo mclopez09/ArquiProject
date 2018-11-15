@@ -194,6 +194,7 @@ Architecture structural of Arquitectura is
 	signal OUTMUX : std_logic_vector(7 downto 0);
 	signal ALUOUTOE : std_logic;
 	signal ALUOUTSAL : std_logic_vector(7 downto 0);
+	signal CLOCK : std_logic;
 
 
 
@@ -202,29 +203,27 @@ Architecture structural of Arquitectura is
 begin	
 	
 
-	AluC1: Alu_v1 generic map (NAlu=>ADDR_WIDTH,MAlu=>OPCODE_WIDTH)
-	port map (OPCODE => OPCODEALU, A => ALUREGISTER, B => OUTMUX, RESUL => ALURESUL);
 
 	MuxPc1: MuxPc_v1 generic map (Nmuxpc => ADDR_WIDTH)
-	port map (Jump => JUMPIR, Adder => ADDEROUT, PcSource => PCSOURCEMUX, MUXOUT => PCIN);
+	port map (Jump => JUMPIR, Adder => ADDEROUT, PcSource => PCSOURCEMUX, MUXOUT => PCIN, clk => CLOCK);
 
 	PC1: PC_v1 generic map ( Npc => ADDR_WIDTH )
-	port map (MuxPc => PCIN, PCOut => OUTPC, PCSig => SIGPC);
+	port map (MuxPc => PCIN, PCOut => OUTPC, PCSig => SIGPC, clk => CLOCK);
 
 	ADDERC1: Adder_v1 generic map (Nadder => ADDR_WITH)
 	port map (Pc => OUTPC, OUTADDER => ADDEROUT );
 
 	ROMC1: Rom_v1 generic map (Nrom => DATA_WIDTH)
-	port map (addres => OUTPC, data_out => ROMOUT);
+	port map (addres => OUTPC, data_out => ROMOUT, clk => CLOCK);
 
 	IRC1: IR_v1 generic map (Nir => DATA_WIDTH, Mir => OPCODE_WIDTH, Pir => ADDR_WIDTH)
-	port map (instruccion => ROMOUT, oeir => IROE, irwrite => WRITEIR, oeirj => IRJOE, opcodeir => IROPCODE, outrd => RDIR, outrs => RSIR, outrt => RTIR, outjump => JUMPIR, constante => CONSTANTEIR, constante_dir => CONSTANTEDIR );
+	port map (instruccion => ROMOUT, oeir => IROE, irwrite => WRITEIR, oeirj => IRJOE, opcodeir => IROPCODE, outrd => RDIR, outrs => RSIR, outrt => RTIR, outjump => JUMPIR, constante => CONSTANTEIR, constante_dir => CONSTANTEDIR, clk => CLOCK );
 
 	REGC1: RegisterFile_v1 generic map (Nreg => OPCODE_WIDTH, Mreg => ADDR_WIDTH)
-	port map (regWrite => WRITEREG, regMem => MEMREG, rd => RDIR, rs => RSIR, rt => RTIR, Register_bus => OUTREGISTER, Register_alu => ALUREGISTER, Register_mux => MUXREGISTER);
+	port map (regWrite => WRITEREG, regMem => MEMREG, rd => RDIR, rs => RSIR, rt => RTIR, Register_bus => OUTREGISTER, Register_alu => ALUREGISTER, Register_mux => MUXREGISTER, clk => CLOCK);
 
 	MuxAluC1: MuxAlu_v1 generic map (Nalux => ADDR_WIDTH)
-	port map (registerFile => ALUREGISTER, irA => CONSTANTEIR, AluSource => SOURCEALU, MuxOut => OUTMUX);
+	port map (registerFile => ALUREGISTER, irA => CONSTANTEIR, AluSource => SOURCEALU, MuxOut => OUTMUX, clk => CLOCK);
 
 	AluC1: Alu_v1 generic map (NAlu=>ADDR_WIDTH,MAlu=>OPCODE_WIDTH)
 	port map (OPCODE => OPCODEALU, A => ALUREGISTER, B => OUTMUX, RESUL => ALURESUL);
