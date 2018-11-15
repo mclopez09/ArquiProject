@@ -22,7 +22,7 @@ Entity IR_v1 is
 	(	instruccion: in std_logic_vector(Nir-1 downto 0);
 		oeir,oeirj,irwrite: inout std_logic;
 		clk : in std_logic;
-		opcodeir: out std_logic_vector(Mir-1 downto 0);
+		opcode: out std_logic_vector(Mir-1 downto 0);
 		outrd,outrs,outrt : out std_logic_vector(Mir-1 downto 0):="0000";
 		outjump, constante, constante_dir : out std_logic_vector(Pir-1 downto 0)
 	);
@@ -61,7 +61,7 @@ signal opcodetmp2 : std_logic_vector(3 downto 0);
 				outrs(1)<=instruccion(9);
 				outrs(2)<=instruccion(10);
 				outrs(3)<=instruccion(11);
-				opcodeir<=opcodetmp;
+				opcode<=opcodetmp;
 			elsif (opcodetmp2="1010" ) then
 				oeirj <= '1';
 				outjump(0)<=instruccion(0);
@@ -72,7 +72,7 @@ signal opcodetmp2 : std_logic_vector(3 downto 0);
 				outjump(5)<=instruccion(5);
 				outjump(6)<=instruccion(6);
 				outjump(7)<=instruccion(7);
-				opcodeir<=opcodetmp2;
+				opcode<=opcodetmp2;
 				
 			elsif (opcodetmp2="0001") then
 				constante(0)<=instruccion(0);
@@ -83,9 +83,10 @@ signal opcodetmp2 : std_logic_vector(3 downto 0);
 				constante(5)<=instruccion(5);
 				constante(6)<=instruccion(6);
 				constante(7)<=instruccion(7);
-				opcodeir<=opcodetmp2;
+				opcode<=opcodetmp2;
 					
 			elsif(opcodetmp2="0100" or opcodetmp2="0101" or opcodetmp2="0110" or opcodetmp2="0111" or opcodetmp2="1000" or opcodetmp2="1001" or opcodetmp2="1101" or opcodetmp2="1110") then
+				oeir <= '1';
 				constante_dir(0)<=instruccion(0);
 				constante_dir(1)<=instruccion(1);
 				constante_dir(2)<=instruccion(2);
@@ -102,7 +103,7 @@ signal opcodetmp2 : std_logic_vector(3 downto 0);
 				outrs(1)<=instruccion(13);
 				outrs(2)<=instruccion(14);
 				outrs(3)<=instruccion(15);
-				opcodeir<=opcodetmp2;
+				opcode<=opcodetmp2;
 			else 
 				outjump<=NULL;
 				outrd<=NULL;
