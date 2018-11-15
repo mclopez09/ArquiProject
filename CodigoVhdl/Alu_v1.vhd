@@ -26,7 +26,7 @@ Entity Alu_v1 is
 End Entity;
 
 Architecture Alu_v1_arc of Alu_v1 is
-	signal temporary :std_logic_vector(NAlu downto 0);
+	signal temporary :std_logic_vector(15 downto 0);
 Begin
 
 process(A,B,OPCODE)

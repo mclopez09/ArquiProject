@@ -17,8 +17,7 @@ use IEEE.numeric_std.all;
 Entity Adder_v1 is
 	generic (Nadder: positive := 8);
 	port
-	(
-		Pc: in std_logic_vector(Nadder-1 downto 0);
+	(	Pc: inout std_logic_vector(Nadder-1 downto 0);
 		OUTADDER: out std_logic_vector(Nadder-1 downto 0)
 	);
 
@@ -26,5 +25,5 @@ End Entity;
 
 Architecture Adder_v1_arc of Adder_v1 is
 	Begin
-		Pc1 <= std_logic_vector(unsigned(Pc) + 1);
-End Architecture Adder_v1;
+		Pc <= std_logic_vector(unsigned(Pc) + 1);
+End Architecture Adder_v1_arc;

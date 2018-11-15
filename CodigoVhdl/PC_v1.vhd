@@ -36,13 +36,7 @@ Architecture PC_v1_arc of PC_v1 is
 				temp <= "00000001";
 				temp2 <= std_logic_vector(unsigned(MuxPc) *	unsigned(temp));
 			end if;
-			PcOut <= temp2;
+			PcOut <= temp2(Npc-1 downto 0);
 		end process;
 
 End Architecture PC_v1_arc ;
-
-
-
-
-
-

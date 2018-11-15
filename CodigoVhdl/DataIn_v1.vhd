@@ -17,7 +17,7 @@ use IEEE.numeric_std.all;
 Entity DataIn_v1 is
 	generic(Ndata: positive :=8);
 	port
-	(input: in std_logic_vector(Ndata-1 downto 0);
+	(inputdata: in std_logic_vector(Ndata-1 downto 0);
 	salida: out std_logic_vector(Ndata-1 downto 0);
 	ent: in std_logic
 	);
@@ -29,7 +29,7 @@ begin
 	process(ent) is
 	begin
 		if(ent = '1') then	
-			salida <= input;
+			salida <= inputdata;
 		end if;
 	end process;
 end architecture;

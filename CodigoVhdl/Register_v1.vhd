@@ -28,7 +28,7 @@ port(
 	rt: in std_logic_vector(Nreg-1 downto 0);
 	Register_bus: inout std_logic_vector(Mreg-1 downto 0);
 	Register_alu: out std_logic_vector(Mreg-1 downto 0);
-	Register_mux: out std_logic_vector(Mreg-1 downto 0)
+	Register_mux: out std_logic_vector(Mreg-1 downto 0);
 );
 end entity;
 
@@ -36,7 +36,7 @@ Architecture Register_arc of Register_v1 is
 
 --Registros--
 
-signal r0,r1,r2,r3,r4,r5,r6,r7,at,zero,ip,op,gp :std_logic_vector(M-1 downto 0);
+signal r0,r1,r2,r3,r4,r5,r6,r7,at,zero,ip,op,gp :std_logic_vector(Mreg-1 downto 0);
 
 begin 
 	process(clk) is
@@ -69,23 +69,40 @@ begin
 	process(Clk) is 
 	begin
 		case rs is
-			when "0000" => Register_alu <= r0;
-			when "0001" => Register_alu <= r1;
-			when "0010" => Register_alu <= r2;
-			when "0011" => Register_alu <= r3;
-			when "0100" => Register_alu <= r4;
-			when "0101" => Register_alu <= r5;
-			when "0110" => Register_alu <= r6;
-			when "0111" => Register_alu <= r7;
-			when "1000" => zero <= "00000000";
-			when "1001" => zero <= "00000000";
-			when "1010" => zero <= "00000000";
-			when "1011" => zero <= "00000000";
-			when "1100" => zero <= "00000000";
-			when "1101" => zero <= "00000000";
-			when "1110" => zero <= "00000000";
-			when "1111" => zero <= "00000000";
-			
+			if regMem='1' and regWrite='0' then
+				when "0000" => Register_bus <= r0;
+				when "0001" => Register_bus <= r1;
+				when "0010" => Register_bus <= r2;
+				when "0011" => Register_bus <= r3;
+				when "0100" => Register_bus <= r4;
+				when "0101" => Register_bus <= r5;
+				when "0110" => Register_bus <= r6;
+				when "0111" => Register_bus <= r7;
+				when "1000" => zero <= "00000000";
+				when "1001" => zero <= "00000000";
+				when "1010" => zero <= "00000000";
+				when "1011" => zero <= "00000000";
+				when "1100" => zero <= "00000000";
+				when "1101" => zero <= "00000000";
+				
+			elsif
+				when "0000" => Register_alu <= r0;
+				when "0001" => Register_alu <= r1;
+				when "0010" => Register_alu <= r2;
+				when "0011" => Register_alu <= r3;
+				when "0100" => Register_alu <= r4;
+				when "0101" => Register_alu <= r5;
+				when "0110" => Register_alu <= r6;
+				when "0111" => Register_alu <= r7;
+				when "1000" => zero <= "00000000";
+				when "1001" => zero <= "00000000";
+				when "1010" => zero <= "00000000";
+				when "1011" => zero <= "00000000";
+				when "1100" => zero <= "00000000";
+				when "1101" => zero <= "00000000";
+				when "1110" => zero <= "00000000";
+				when "1111" => zero <= "00000000";
+			end if;
 		end case;
 	end process;
 

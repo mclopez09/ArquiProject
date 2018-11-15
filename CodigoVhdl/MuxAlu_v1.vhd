@@ -43,6 +43,3 @@ Architecture MuxAlu_v1_arc of MuxAlu_v1 is
 		end process;
 
 End Architecture MuxAlu_v1_arc ;
-
-
-

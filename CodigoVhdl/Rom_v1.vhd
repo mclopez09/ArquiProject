@@ -12,6 +12,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
 --entity rom
 
 entity Rom_v1 is
@@ -37,5 +38,5 @@ begin
 			reg_address <=  address;
 		end if;
 	end process;
-	data_out <= rom(reg_address);
+	data_out <= rom(to_integer(unsigned(reg_address)));
 end architecture;

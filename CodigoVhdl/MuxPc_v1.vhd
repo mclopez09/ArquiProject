@@ -43,6 +43,3 @@ Architecture MuxPc_v1_arc of MuxPc_v1 is
 		end process;
 
 End Architecture MuxPc_v1_arc ;
-
-
-
