@@ -34,8 +34,7 @@ entity UControl_v1 is
 		readmem :out std_logic;
 		memtoreg : out std_logic;
 		oealuout :out std_logic;
-		readmem :out std_logic;
-		oedatain :out std_logic;
+		oedatain :out std_logic
 	);
 
 end entity;
@@ -52,4 +51,3 @@ begin
 	
 	end process;
 end architecture;
-
