@@ -19,7 +19,7 @@ USE ieee.numeric_std.ALL;
 entity Ram_v1 is
 generic (Mram: positive := 8);
 port(
-	clk, WriteMem: in std_logic;
+	clk, WriteMem, ReadMem: in std_logic;
 	data_in: in std_logic_vector(Mram-1 downto 0);
 	wr_address, rd_address: in std_logic_vector(Mram-1 downto 0);
 	data_out: out std_logic_vector(Mram-1 downto 0)
@@ -41,7 +41,9 @@ begin
 				
 				my_ram(to_integer(unsigned(wr_address))) <= data_in;
 			end if;
-			data_out <= my_ram(to_integer(unsigned(rd_address)));
+			if(ReadMem = '1') then
+				data_out <= my_ram(to_integer(unsigned(rd_address)));
+			end if;
 		end if;
 	end process;
 end architecture;
