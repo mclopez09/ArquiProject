@@ -166,7 +166,7 @@ Architecture structural of Arquitectura_v1 is
 
 	Component UControl_v1 
 
-	generic (Nu: positive := 4);
+	generic(Nu: positive:=4);
 	port
 	(
 		clk : in	std_logic;
@@ -179,19 +179,15 @@ Architecture structural of Arquitectura_v1 is
 		oeirj :out std_logic;
 		oeiri :out std_logic;
 		regwrite : out std_logic;		
-		memread : out std_logic;
-		memwrite : out std_logic;
 		regtomem :out std_logic;	
 		aluop : out std_logic_vector (Nu-1 downto 0);
 		alusrc : out std_logic;
 		writemem :out std_logic;
 		readmem :out std_logic;
-		memtoreg : out std_logic;
 		oealuout :out std_logic;
 		oedatain :out std_logic
 	);
-	End Component;
-
+	
 	Component And_v1 
 
 	port
