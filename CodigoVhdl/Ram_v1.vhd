@@ -13,6 +13,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.ALL;
 --entity ram
 
 entity Ram_v1 is
@@ -37,9 +38,10 @@ begin
 	begin
 		if(rising_edge(clk)) then
 			if(WriteMem = '1') then
-				my_ram(wr_address) <= data_in;
+				
+				my_ram(to_integer(unsigned(wr_address))) <= data_in;
 			end if;
-			data_out <= my_ram(rd_address);
+			data_out <= my_ram(to_integer(unsigned(rd_address)));
 		end if;
 	end process;
 end architecture;
