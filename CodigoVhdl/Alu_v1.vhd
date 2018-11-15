@@ -15,18 +15,18 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 Entity Alu_v1 is
-	generic (N: positive := 16 ; M: positive := 4);
+	generic (NALu: positive := 8 ; MAlu: positive := 4);
 
 	port(
-		OPCODE : in std_logic_vector(M-1 downto 0);
-		A,B,C : in std_logic_vector(N-1 downto 0);
-		RESUL: out std_logic_vector(N-1 downto 0);
+		OPCODE : in std_logic_vector(MAlu-1 downto 0);
+		A,B : in std_logic_vector(NAlu-1 downto 0);
+		RESUL: out std_logic_vector(NAlu-1 downto 0);
 		Branch: out std_logic
 	);
 End Entity;
 
 Architecture Alu_v1_arc of Alu_v1 is
-	signal temporary :std_logic_vector(31 downto 0);
+	signal temporary :std_logic_vector(NAlu downto 0);
 Begin
 
 process(A,B,OPCODE)
@@ -43,11 +43,11 @@ process(A,B,OPCODE)
 
 	when "0011" =>
 		temporary <= std_logic_vector(unsigned(A) *	unsigned(B));
-		RESUL <= temporary(15 downto 0);
+		RESUL <= temporary(NAlu-1 downto 0);
 		Branch <= '0';
 
 	when "0001" =>
-		RESUL <= std_logic_vector(unsigned(A) + unsigned(C));
+		RESUL <= std_logic_vector(unsigned(A) + unsigned(B));
 		Branch <= '0';
 
 	when "0100" =>

@@ -15,17 +15,17 @@ use ieee.std_logic_unsigned.all;
 --entity rom
 
 entity Rom_v1 is
-generic (N: positive := 16);
+generic (Nrom: positive := 20 ; Mrom: positive := 8);
 port(
 	clk: std_logic;
-	address: in integer range 0 to 255;
-	data_out: out std_logic_vector(N-1 downto 0)
+	address: in std_logic_vector(Mrom-1 downto 0);
+	data_out: out std_logic_vector(Nrom-1 downto 0)
 );
 end entity;
 
 architecture Rom_v1_arc of Rom_v1 is
-signal reg_address: integer range 0 to 256;
-type mem is array (0 to 255) of std_logic_vector(17 downto 0);
+signal reg_address: std_logic_vector(Mrom-1 downto 0);
+type mem is array (0 to 255) of std_logic_vector(Nrom-1 downto 0);
 signal rom : mem;
 attribute ram_init_file: string;
 attribute ram_init_file of rom: signal is "rom_contents.mif";

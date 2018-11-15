@@ -16,19 +16,19 @@ use ieee.std_logic_unsigned.all;
 
 
 entity Register_v1 is
-generic (N: positive := 4 ; M: positive := 8);
+generic (Nreg: positive := 4 ; Mreg: positive := 8);
 
 
 port(
 	clk: std_logic;
 	regWrite: std_logic;
 	regMem: std_logic;
-	rd: in std_logic_vector(N-1 downto 0);
-	rs: in std_logic_vector(N-1 downto 0);
-	rt: in std_logic_vector(N-1 downto 0);
-	Register_bus: inout std_logic_vector(M-1 downto 0);
-	Register_alu: out std_logic_vector(M-1 downto 0);
-	Register_mux: out std_logic_vector(M-1 downto 0)
+	rd: in std_logic_vector(Nreg-1 downto 0);
+	rs: in std_logic_vector(Nreg-1 downto 0);
+	rt: in std_logic_vector(Nreg-1 downto 0);
+	Register_bus: inout std_logic_vector(Mreg-1 downto 0);
+	Register_alu: out std_logic_vector(Mreg-1 downto 0);
+	Register_mux: out std_logic_vector(Mreg-1 downto 0)
 );
 end entity;
 

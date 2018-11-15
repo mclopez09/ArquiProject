@@ -14,13 +14,13 @@ Library IEEE;
 use IEEE.std_logic_1164.all;
 
 Entity MuxAlu_v1 is
-	generic (N: positive := 8);
+	generic (Nalux: positive := 8);
 	port
-	(	registerFile : in std_logic_vector(N-1 downto 0);
-		irA : in std_logic_vector(N-1 downto 0);
+	(	registerFile : in std_logic_vector(Nalux-1 downto 0);
+		irA : in std_logic_vector(Nalux-1 downto 0);
 		clk : in std_logic;
 		AluSource: in std_logic;
-		MuxOut : out std_logic_vector(N-1 downto 0)
+		MuxOut : out std_logic_vector(Nalux-1 downto 0)
 	);
 
 End Entity;
@@ -43,4 +43,6 @@ Architecture MuxAlu_v1_arc of MuxAlu_v1 is
 		end process;
 
 End Architecture MuxAlu_v1_arc ;
+
+
 

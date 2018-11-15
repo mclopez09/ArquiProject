@@ -16,20 +16,19 @@ use IEEE.numeric_std.all;
 
 Entity IR_v1 is
 
-	generic (Nir: positive := 20 ; Mir: positive := 4 ; Pir: positive := 8);
+	generic (Nir: positive := 20 ; Mir: positive := 4) ; Pir: positive := 8;
 
 	port
 	(	instruccion: in std_logic_vector(Nir-1 downto 0);
-		oeir,oeirj,irwrite: inout std_logic;
+		oeir,irwrite: inout std_logic;
 		clk : in std_logic;
-		opcodeir: out std_logic_vector(Mir-1 downto 0);
-		outrd,outrs,outrt : out std_logic_vector(Mir-1 downto 0):="0000";
-		outjump, constante, constante_dir : out std_logic_vector(Pir-1 downto 0)
+		opcode : out std_logic_vector(Mir-1 downto 0);
+		outrd,outrs,outrt : out std_logic_vector(Mir-1 downto 0):="0000"
+		outjump, constante, constante_dir : out std_logic_vector(Pir-1 downto 0);
 	);
 end entity;
 Architecture IR_v1_arc of IR_v1 is
 signal opcodetmp : std_logic_vector(3 downto 0);
-signal opcodetmp2 : std_logic_vector(3 downto 0);
 	Begin
 	process(clk,irwrite)
 	Begin
@@ -38,17 +37,12 @@ signal opcodetmp2 : std_logic_vector(3 downto 0);
 		opcodetmp(1)<=instruccion(13);
 		opcodetmp(2)<=instruccion(14);
 		opcodetmp(3)<=instruccion(15);
-		opcodetmp2(0)<=instruccion(16);
-		opcodetmp2(1)<=instruccion(17);
-		opcodetmp2(2)<=instruccion(18);
-		opcodetmp2(3)<=instruccion(19);
-		
 	end if;
 	end process;
 	process(clk,oeir,irwrite)
 	Begin
 	if (rising_edge(clk)) then
-			if ((opcodetmp="0000" OR opcodetmp="0010" OR opcodetmp="0011") and opcodetmp2="0000") then
+			if (opcodetmp="0000" OR opcodetmp="0010" OR opcodetmp="0011") then
 				outrd(0)<=instruccion(0);
 				outrd(1)<=instruccion(1);
 				outrd(2)<=instruccion(2);
@@ -61,9 +55,8 @@ signal opcodetmp2 : std_logic_vector(3 downto 0);
 				outrs(1)<=instruccion(9);
 				outrs(2)<=instruccion(10);
 				outrs(3)<=instruccion(11);
-				opcodeir<=opcodetmp;
-			elsif (opcodetmp2="1010" ) then
-				oeirj <= '1';
+			elsif (opcodetmp="1010" ) then
+				oeir <= '1';
 				outjump(0)<=instruccion(0);
 				outjump(1)<=instruccion(1);
 				outjump(2)<=instruccion(2);
@@ -72,43 +65,26 @@ signal opcodetmp2 : std_logic_vector(3 downto 0);
 				outjump(5)<=instruccion(5);
 				outjump(6)<=instruccion(6);
 				outjump(7)<=instruccion(7);
-				opcodeir<=opcodetmp2;
-				
-			elsif (opcodetmp2="0001") then
-				constante(0)<=instruccion(0);
-				constante(1)<=instruccion(1);
-				constante(2)<=instruccion(2);
-				constante(3)<=instruccion(3);
-				constante(4)<=instruccion(4);
-				constante(5)<=instruccion(5);
-				constante(6)<=instruccion(6);
-				constante(7)<=instruccion(7);
-				opcodeir<=opcodetmp2;
-					
-			elsif(opcodetmp2="0100" or opcodetmp2="0101" or opcodetmp2="0110" or opcodetmp2="0111" or opcodetmp2="1000" or opcodetmp2="1001" or opcodetmp2="1101" or opcodetmp2="1110") then
-				constante_dir(0)<=instruccion(0);
-				constante_dir(1)<=instruccion(1);
-				constante_dir(2)<=instruccion(2);
-				constante_dir(3)<=instruccion(3);
-				constante_dir(4)<=instruccion(4);
-				constante_dir(5)<=instruccion(5);
-				constante_dir(6)<=instruccion(6);
-				constante_dir(7)<=instruccion(7);
-				outrt(0)<=instruccion(8);
-				outrt(1)<=instruccion(9);
-				outrt(2)<=instruccion(10);
-				outrt(3)<=instruccion(11);
-				outrs(0)<=instruccion(12);
-				outrs(1)<=instruccion(13);
-				outrs(2)<=instruccion(14);
-				outrs(3)<=instruccion(15);
-				opcodeir<=opcodetmp2;
-			else 
+			elsif (opcodetmp="1111") then
 				outjump<=NULL;
 				outrd<=NULL;
 				outrs<=NULL;
 				outrt<=NULL;
+			else
+				outrd(0)<=instruccion(0);
+				outrd(1)<=instruccion(1);
+				outrd(2)<=instruccion(2);
+				outrd(3)<=instruccion(3);
+				outrt(0)<=instruccion(4);
+				outrt(1)<=instruccion(5);
+				outrt(2)<=instruccion(6);
+				outrt(3)<=instruccion(7);
+				outrs(0)<=instruccion(8);
+				outrs(1)<=instruccion(9);
+				outrs(2)<=instruccion(10);
+				outrs(3)<=instruccion(11);
 			end if;
 	end if;
 	end process;
+	opcode<=opcodetmp;
 End Architecture IR_v1_arc;

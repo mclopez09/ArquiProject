@@ -16,12 +16,12 @@ use ieee.std_logic_unsigned.all;
 --entity ram
 
 entity Ram_v1 is
-generic (N: positive := 8);
+generic (Mram: positive := 8);
 port(
 	clk, WriteMem: in std_logic;
-	data_in: in std_logic_vector(N-1 downto 0);
-	wr_address, rd_address: in integer range 0 to 255;
-	data_out: out std_logic_vector(N-1 downto 0)
+	data_in: in std_logic_vector(Mram-1 downto 0);
+	wr_address, rd_address: in std_logic_vector(Mram-1 downto 0);
+	data_out: out std_logic_vector(Mram-1 downto 0)
 );
 end entity;
 
