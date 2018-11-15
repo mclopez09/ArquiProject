@@ -212,6 +212,18 @@ Architecture structural of Arquitectura_v1 is
 
 	End Component;
 
+	Component DataIn_v1
+
+	generic (Ndata: positive := 8);
+	port(
+		input: in std_logic_vector(Ndata-1 downto 0);
+		Salida : Out std_logic_vector(Ndata-1 downto 0);
+		ent: std_logic;
+
+		);
+
+	End Component;
+
 	signal OPCODEALU : std_logic_vector(3 downto 0);
 	signal AALU : std_logic_vector(7 downto 0);
 	signal BALU : std_logic_vector(7 downto 0);
@@ -291,5 +303,7 @@ BEGIN
 
 	ORC1: Or_v1 port map (AndOut => OUTAND, PcWrite => WRITEPC, OrOut => OUTOR);
 
+	DataInC1: DataIn_v1 generic map(Ndata => ADDR_WIDTH )
+	port map (Input => entrada, salida => OUTREGISTER, ent => enter);
 
 End structural;
