@@ -182,12 +182,13 @@ Architecture structural of Arquitectura_v1 is
 		regtomem :out std_logic;	
 		aluop : out std_logic_vector (Nu-1 downto 0);
 		alusrc : out std_logic;
-		writemem :out std_logic;
-		readmem :out std_logic;
+		memwrite :out std_logic;
+		memread :out std_logic;
 		oealuout :out std_logic;
 		oedatain :out std_logic
 	);
-
+	end component;
+	
 	Component And_v1 
 
 	port
@@ -208,31 +209,6 @@ Architecture structural of Arquitectura_v1 is
 		PcWrite: in std_logic;
 		OrOut : out std_logic
 	);
-
-	Component DataIn_v1
-
-	generic (Ndata: positive := 8);
-	port(
-		input: in std_logic_vector(Ndata-1 downto 0);
-		Salida : Out std_logic_vector(Ndata-1 downto 0);
-		ent: std_logic;
-
-		);
-
-	End Component;
-
-	Component DataOut_v1
-
-	generic (NdataOut: positive := 8);
-	port(
-		input: in std_logic_vector(NdataOut-1 downto 0);
-		Out1 : in std_logic_vector(NdataOut-1 downto 0) );
-		Out2 : in std_logic_vector(NdataOut-1 downto 0)
-		);
-		Out3 : in std_logic_vector(NdataOut-1 downto 0)
-		);
-		Out4 : in std_logic_vector(NdataOut-1 downto 0)
-		 ;
 
 	End Component;
 
@@ -306,7 +282,7 @@ BEGIN
 	port map (dataAlu => ALURESUL,RESULOUT => ALUOUTSAL, oeAluOut => ALUOUTOE);
 
 	--RAMC1: Ram_v1 generic map (Mram => ADDR_WIDTH)
-	--port map (data_in => OUTREGISTER, wr_address => CONSTANTEDIR, rd_address => CONSTANTEDIR, data_out => OUTREGISTER)
+	--port map (data_in => entrada , wr_address => CONSTANTEDIR, rd_address => CONSTANTEDIR, data_out => )
 
 	UControlC1: UControl_v1 generic map(Nu => OPCODE_WIDTH)
 	port map (clk => CLOCK, reset => reseteo, input => IROPCODE, pcwritecond => CONDPCWRITE, pcwrite => WRITEPC, pcsource => PCSOURCEMUX, irwrite => WRITEIR, oeirj => IRJOE, oeiri => IROE, regwrite => WRITEREG,regtomem => MEMREG, aluop => OPCODEALU, alusrc => SOURCEALU, memread => READMEM, memwrite => WRITEMEM, oealuout => ALUOUTOE, oedatain => DATAINOE);
@@ -314,9 +290,6 @@ BEGIN
 	AndC1: And_v1 port map (PcWriteCond => CONDPCWRITE, AluZero => ZERO, AndOut => OUTAND);
 
 	ORC1: Or_v1 port map (AndOut => OUTAND, PcWrite => WRITEPC, OrOut => OUTOR);
-
-	DataInC1: DataIn_v1 generic map(Ndata => ADDR_WIDTH )
-	port map (Input => entrada, salida => OUTREGISTER, ent => enter);
 
 
 End structural;
