@@ -17,7 +17,7 @@ Library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-Entity Arquitectura is
+Entity Arquitectura_v1 is
 
 	generic 
 	(
@@ -41,7 +41,7 @@ Entity Arquitectura is
 End Entity;
 
 
-Architecture structural of Arquitectura is
+Architecture structural of Arquitectura_v1 is
 	
 	Component Alu_v1 
 
@@ -114,7 +114,7 @@ Architecture structural of Arquitectura is
 
 	End Component;
 
-	Component RegisterFile_v1
+	Component Register_v1
 	generic (Nreg: positive := 4 ; Mreg: positive := 8);
 
 
@@ -179,7 +179,7 @@ Architecture structural of Arquitectura is
 	signal IROE : std_logic;
 	signal WRITEIR : std_logic;
 	signal IRJOE : std_logic;
-	signal IROPCODE : std_logic_vector(19 downto 0);
+	signal IROPCODE : std_logic_vector(3 downto 0);
 	signal RDIR : std_logic_vector(3 downto 0);
 	signal RSIR : std_logic_vector(3 downto 0);
 	signal RTIR : std_logic_vector(3 downto 0);
@@ -196,30 +196,24 @@ Architecture structural of Arquitectura is
 	signal ALUOUTSAL : std_logic_vector(7 downto 0);
 	signal CLOCK : std_logic;
 
-
-
-
-
-begin	
+BEGIN	
 	
-
-
 	MuxPc1: MuxPc_v1 generic map (Nmuxpc => ADDR_WIDTH)
 	port map (Jump => JUMPIR, Adder => ADDEROUT, PcSource => PCSOURCEMUX, MUXOUT => PCIN, clk => CLOCK);
 
 	PC1: PC_v1 generic map ( Npc => ADDR_WIDTH )
 	port map (MuxPc => PCIN, PCOut => OUTPC, PCSig => SIGPC, clk => CLOCK);
 
-	ADDERC1: Adder_v1 generic map (Nadder => ADDR_WITH)
+	ADDERC1: Adder_v1 generic map (Nadder => ADDR_WIDTH)
 	port map (Pc => OUTPC, OUTADDER => ADDEROUT );
 
 	ROMC1: Rom_v1 generic map (Nrom => DATA_WIDTH)
-	port map (addres => OUTPC, data_out => ROMOUT, clk => CLOCK);
+	port map (address => OUTPC, data_out => ROMOUT, clk => CLOCK);
 
 	IRC1: IR_v1 generic map (Nir => DATA_WIDTH, Mir => OPCODE_WIDTH, Pir => ADDR_WIDTH)
-	port map (instruccion => ROMOUT, oeir => IROE, irwrite => WRITEIR, oeirj => IRJOE, opcodeir => IROPCODE, outrd => RDIR, outrs => RSIR, outrt => RTIR, outjump => JUMPIR, constante => CONSTANTEIR, constante_dir => CONSTANTEDIR, clk => CLOCK );
+	port map (instruccion => ROMOUT, oeir => IROE, irwrite => WRITEIR, oeirj => IRJOE, opcode => IROPCODE, outrd => RDIR, outrs => RSIR, outrt => RTIR, outjump => JUMPIR, constante => CONSTANTEIR, constante_dir => CONSTANTEDIR, clk => CLOCK );
 
-	REGC1: RegisterFile_v1 generic map (Nreg => OPCODE_WIDTH, Mreg => ADDR_WIDTH)
+	REGC1: Register_v1 generic map (Nreg => OPCODE_WIDTH, Mreg => ADDR_WIDTH)
 	port map (regWrite => WRITEREG, regMem => MEMREG, rd => RDIR, rs => RSIR, rt => RTIR, Register_bus => OUTREGISTER, Register_alu => ALUREGISTER, Register_mux => MUXREGISTER, clk => CLOCK);
 
 	MuxAluC1: MuxAlu_v1 generic map (Nalux => ADDR_WIDTH)
@@ -228,17 +222,9 @@ begin
 	AluC1: Alu_v1 generic map (NAlu=>ADDR_WIDTH,MAlu=>OPCODE_WIDTH)
 	port map (OPCODE => OPCODEALU, A => ALUREGISTER, B => OUTMUX, RESUL => ALURESUL);
 
-	AluOutC1: Ali_Out_v1 generic map (NAluOut => ADDR_WIDTH)
+	AluOutC1: Alu_Out_v1 generic map (NAluOut => ADDR_WIDTH)
 	port map (dataAlu => ALURESUL,RESULOUT => ALUOUTSAL, oeAluOut => ALUOUTOE);
 
 	--RAMC1: Ram_v1 generic map (Mram => ADDR_WIDTH)
 	--port map (data_in => entrada , wr_address => CONSTANTEDIR, rd_address => CONSTANTEDIR, data_out => )
-
-
-
-
-
-
-
-
-End Architecture;
+End structural;
