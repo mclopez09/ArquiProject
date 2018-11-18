@@ -33,14 +33,15 @@ entity UControl_v1 is
 		memwrite :out std_logic;
 		memread :out std_logic;
 		oealuout :out std_logic;
-		oedatain :out std_logic
+		oedatain :out std_logic;
+		regram :out std_logic
 	);
 
 end entity;
 
 architecture UControl_v1_arch of UControl_v1 is
 
-	type State_Type is (fetch,completioni,completionr,completionbranch,lw,sw,add,jump,branchbeq,branchbnq,branchblt,branchbgt,branchbgte,branchbgtz,sub,mult,addi);
+	type State_Type is (fetch,iput,oput,completioni,completionr,completionbranch,lw,sw,add,jump,branchbeq,branchbnq,branchblt,branchbgt,branchbgte,branchbgtz,sub,mult,addi);
 
 	signal state : State_Type := fetch;
 
@@ -96,7 +97,7 @@ begin
 				when mult =>
 					state <= completionr;
 				when branchbeq =>
-					state <= completioni;
+					state <= completionbranch;
 				when branchbnq =>
 					state <= completionbranch;
 				when branchblt =>
@@ -113,7 +114,10 @@ begin
 					state <= fetch;
 				when sw =>
 					state <= fetch;
-				
+				when iput=>
+					state <= fetch;
+				when oput=>
+					state <= fetch;
 			end case;
 		end if;
 	end process;
@@ -137,6 +141,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when add=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -152,6 +157,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when completionr=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -167,6 +173,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when addi=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -174,7 +181,7 @@ begin
 					irwrite <= '0';
 					oeirj <= '0';
 					oeiri <= '0';
-					regwrite <= '0';		
+					regwrite <= '1';		
 					regtomem <= '0';	
 					aluop <= "0001";
 					alusrc <= '1';
@@ -182,6 +189,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when completioni=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -197,6 +205,7 @@ begin
 					memread <= '0';
 					oealuout <= '1';
 					oedatain <= '0';
+					regram <= '0';
 				when sub=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -204,7 +213,7 @@ begin
 					irwrite <= '0';
 					oeirj <= '0';
 					oeiri <= '0';
-					regwrite <= '0';		
+					regwrite <= '1';		
 					regtomem <= '0';	
 					aluop <= "0010";
 					alusrc <= '0';
@@ -212,11 +221,12 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when mult=>
 					pcwritecond <= '0';
-					pcwrite <= '1';
-					pcsource <= '1';
-					irwrite <= '1';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '1';		
@@ -227,6 +237,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when branchbeq=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -241,7 +252,8 @@ begin
 					memwrite <= '0';
 					memread <= '0';
 					oealuout <= '0';
-					oedatain <= '0';			
+					oedatain <= '0';
+					regram <= '0';			
 				when branchbnq=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -257,6 +269,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when branchblt=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -272,6 +285,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when branchbgt=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -287,6 +301,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when branchbgte=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -302,6 +317,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when branchbgtz=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -317,6 +333,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when completionbranch=>
 					pcwritecond <= '1';
 					pcwrite <= '0';
@@ -331,7 +348,8 @@ begin
 					memwrite <= '0';
 					memread <= '0';
 					oealuout <= '0';
-					oedatain <= '0';			
+					oedatain <= '0';
+					regram <= '0';			
 				when jump=>
 					pcwritecond <= '0';
 					pcwrite <= '1';
@@ -347,6 +365,7 @@ begin
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
+					regram <= '0';
 				when lw=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -361,7 +380,8 @@ begin
 					memwrite <= '0';
 					memread <= '1';
 					oealuout <= '0';
-					oedatain <= '0';	
+					oedatain <= '0';
+					regram <= '0';
 				when sw=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -376,7 +396,40 @@ begin
 					memwrite <= '1';
 					memread <= '0';
 					oealuout <= '0';
-					oedatain <= '0';							
+					oedatain <= '0';
+					regram <= '0';
+				when iput=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '1';
+					regwrite <= '0';		
+					regtomem <= '0';	
+					aluop <= "1011";
+					alusrc <= '0';
+					memwrite <= '1';
+					memread <= '0';
+					oealuout <= '0';
+					oedatain <= '1';
+					regram <= '0';
+				when oput=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '0';
+					regwrite <= '0';		
+					regtomem <= '1';	
+					aluop <= "1100";
+					alusrc <= '0';
+					memwrite <= '0';
+					memread <= '0';
+					oealuout <= '0';
+					oedatain <= '0';
+					regram <= '1';
 			end case;
 	end process;						
 end architecture;
