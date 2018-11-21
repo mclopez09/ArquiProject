@@ -34,25 +34,30 @@ entity UControl_v1 is
 		memread :out std_logic;
 		oealuout :out std_logic;
 		oedatain :out std_logic;
-		regram :out std_logic
+		regram :out std_logic;
+		MBSIG : out std_logic
 	);
 
 end entity;
 
 architecture UControl_v1_arch of UControl_v1 is
 
-	type State_Type is (fetch,iput,oput,completioni,completionr,completionbranch,lw,sw,add,jump,branchbeq,branchbnq,branchblt,branchbgt,branchbgte,branchbgtz,sub,mult,addi);
+	type State_Type is (fetch,fetch2,writereg,fetch3,waitoutput,espera,espera2,iput,oput,completioni,completionr,completionbranch,lw,sw,add,jump,branchbeq,branchbnq,branchblt,branchbgt,branchbgte,branchbgtz,sub,mult,addi);
 
 	signal state : State_Type := fetch;
 
 begin
-	process (clk)
+	process (clk,reset)
 	begin
 		if reset = '1' then
 			state <= fetch;
 		elsif (rising_edge(clk)) then
 			case state is
-				when fetch =>
+				when fetch => 
+					state<= fetch2;
+				when fetch2 => 
+				   state <= fetch3;
+				when fetch3 =>
 					if input = "0000" then
 						state <=add;
 					elsif input = "0001" then
@@ -79,6 +84,10 @@ begin
 						state <= lw;
 					elsif input = "1110" then
 						state <= sw;
+					elsif input = "1011" then
+						state <= iput;
+					elsif input = "1100" then
+						state <= oput;
 					else
 						state <= fetch;
 					end if;
@@ -111,12 +120,20 @@ begin
 				when jump =>
 					state <= fetch;
 				when lw =>
-					state <= fetch;
+					state <= espera;
+				when espera =>
+					state <= writereg;
 				when sw =>
+					state <= espera2;
+				when espera2 =>
 					state <= fetch;
+				when writereg =>
+					state <= fetch;					
 				when iput=>
 					state <= fetch;
 				when oput=>
+					state <= waitoutput;
+				when waitoutput=>
 					state <= fetch;
 			end case;
 		end if;
@@ -130,6 +147,38 @@ begin
 					pcwritecond <= '0';
 					pcwrite <= '1';
 					pcsource <= '1';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '0';
+					regwrite <= '0';		
+					regtomem <= '0';	
+					aluop <= "0000";
+					alusrc <= '0';
+					memwrite <= '0';
+					memread <= '0';
+					oealuout <= '0';
+					oedatain <= '0';
+					regram <= '0';
+				when fetch2=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '0';
+					regwrite <= '0';		
+					regtomem <= '0';	
+					aluop <= "0000";
+					alusrc <= '0';
+					memwrite <= '0';
+					memread <= '0';
+					oealuout <= '0';
+					oedatain <= '0';
+					regram <= '0';
+				when fetch3=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
 					irwrite <= '1';
 					oeirj <= '0';
 					oeiri <= '0';
@@ -340,14 +389,14 @@ begin
 					pcsource <= '0';
 					irwrite <= '0';
 					oeirj <= '0';
-					oeiri <= '1';
+					oeiri <= '0';
 					regwrite <= '0';		
 					regtomem <= '0';	
 					aluop <= "0000";
 					alusrc <= '0';
 					memwrite <= '0';
 					memread <= '0';
-					oealuout <= '0';
+					oealuout <= '1';
 					oedatain <= '0';
 					regram <= '0';			
 				when jump=>
@@ -372,8 +421,8 @@ begin
 					pcsource <= '0';
 					irwrite <= '0';
 					oeirj <= '0';
-					oeiri <= '0';
-					regwrite <= '1';		
+					oeiri <= '1';
+					regwrite <= '0';		
 					regtomem <= '0';	
 					aluop <= "1101";
 					alusrc <= '0';
@@ -382,7 +431,8 @@ begin
 					oealuout <= '0';
 					oedatain <= '0';
 					regram <= '0';
-				when sw=>
+					MBSIG <= '1';
+				when espera=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
 					pcsource <= '0';
@@ -390,7 +440,58 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '0';		
+					regtomem <= '0';	
+					aluop <= "1101";
+					alusrc <= '0';
+					memwrite <= '0';
+					memread <= '0';
+					oealuout <= '0';
+					oedatain <= '0';
+					regram <= '0';
+					MBSIG <= '0';	
+				when writereg=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '0';
+					regwrite <= '1';		
+					regtomem <= '0';	
+					aluop <= "1101";
+					alusrc <= '0';
+					memwrite <= '0';
+					memread <= '0';
+					oealuout <= '0';
+					oedatain <= '0';
+					regram <= '0';
+					MBSIG <= '1';			
+				when sw=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '1';
+					regwrite <= '0';		
 					regtomem <= '1';	
+					aluop <= "1110";
+					alusrc <= '0';
+					memwrite <= '0';
+					memread <= '0';
+					oealuout <= '0';
+					oedatain <= '0';
+					regram <= '0';
+					MBSIG <= '1';
+				when espera2=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '0';
+					regwrite <= '0';		
+					regtomem <= '0';	
 					aluop <= "1110";
 					alusrc <= '0';
 					memwrite <= '1';
@@ -398,6 +499,8 @@ begin
 					oealuout <= '0';
 					oedatain <= '0';
 					regram <= '0';
+					MBSIG <= '1';
+
 				when iput=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
@@ -414,7 +517,24 @@ begin
 					oealuout <= '0';
 					oedatain <= '1';
 					regram <= '0';
+					MBSIG <= '0';
 				when oput=>
+					pcwritecond <= '0';
+					pcwrite <= '0';
+					pcsource <= '0';
+					irwrite <= '0';
+					oeirj <= '0';
+					oeiri <= '1';
+					regwrite <= '0';		
+					regtomem <= '0';	
+					aluop <= "1100";
+					alusrc <= '0';
+					memwrite <= '0';
+					memread <= '1';
+					oealuout <= '0';
+					oedatain <= '0';
+					regram <= '0';
+				when waitoutput=>
 					pcwritecond <= '0';
 					pcwrite <= '0';
 					pcsource <= '0';
@@ -422,14 +542,14 @@ begin
 					oeirj <= '0';
 					oeiri <= '0';
 					regwrite <= '0';		
-					regtomem <= '1';	
+					regtomem <= '0';	
 					aluop <= "1100";
 					alusrc <= '0';
 					memwrite <= '0';
 					memread <= '0';
 					oealuout <= '0';
 					oedatain <= '0';
-					regram <= '1';
+					regram <= '0';
 			end case;
 	end process;						
 end architecture;
